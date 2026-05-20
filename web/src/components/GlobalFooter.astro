@@ -1,0 +1,50 @@
+---
+import type {SiteSettings} from '../lib/types'
+
+interface Props {
+  settings?: SiteSettings | null
+}
+const {settings} = Astro.props
+
+const rawTags = settings?.projectTags ?? []
+const tags = [...rawTags].sort((a, b) => a.localeCompare(b))
+const tagSlug = (tag: string) => tag.toLowerCase().replace(/\s+/g, '')
+---
+
+<footer class="footer">
+  <div class="footer__container">
+    <div class="footer__column footer__logo">
+      <img src="/assets/images/MEIS-footerlogo.svg" alt="Logo" />
+    </div>
+
+    <div class="footer__icon">
+      <img src="/assets/images/MEIS-icon-white.svg" alt="Logo" />
+    </div>
+
+    <div class="footer__column footer_pages">
+      {
+        tags.length > 0 && (
+          <div class="col">
+            <h4><a href="/aanbod"></a>AANBOD</h4>
+            <ul>
+              {tags.map((tag) => (
+                <li>
+                  <a href={`/aanbod#${tagSlug(tag)}`}>{tag}</a>
+                </li>
+              ))}
+            </ul>
+          </div>
+        )
+      }
+
+      <div class="col">
+        <h4>LET’S CONNECT</h4>
+        <ul>
+          <li><a href="/over">Over Meis</a></li>
+          <li><a href="/contact">Contact</a></li>
+          <li><a href="/contact">Offerte aanvragen</a></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</footer>

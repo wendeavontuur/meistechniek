@@ -1,0 +1,77 @@
+* {
+    margin: 0;
+    padding: 0;
+  }
+  
+  :root {
+    --padding: 1.5rem;
+    --color-black: #16192D;
+    --color-white: #EAE9E9;
+    --color-grey: #E2E3E8;
+    --color-light: #EAE9E9;
+    --color-text: var(--color-black);
+    --color-text-grey: var(--color-grey);
+    --color-background:        #F9F9F9;
+    --color-blue:             #14B8DC;
+    --color-code-light-grey:  #cacbd1;
+    --color-code-comment:     #a9aaad;
+    --color-code-white:       #c5c9c6;
+    --color-code-red:         #d16464;
+    --color-code-orange:      #de935f;
+    --color-code-yellow:      #f0c674;
+    --color-code-green:       #a7bd68;
+    --color-code-aqua:        #8abeb7;
+    --color-code-purple:      #b294bb;
+    --font-family-base: Avenir, Helvetica, Arial, sans-serif;
+    --font-family-title: "sztos-variable", Arial, Helvetica, sans-serif;
+    --font-family-button: "sztos-variable", Arial, Helvetica, sans-serif;
+}
+  
+html {
+    font-family: var(--font-family-base);
+    color: var(--color-text);
+    background-color: var(--color-black);
+    font-size:16px;
+}
+html * {
+    box-sizing: border-box;
+}
+
+img {
+    width: 100%;
+}
+
+body {
+    margin: 0 auto;
+    background-color: var(--color-background);
+}
+
+li {
+    list-style: none;
+}
+
+a {
+    color: currentColor;
+    text-decoration: none;
+}
+
+h1, h2, h3, h4, h5, h6 {
+    font-family: var(--font-family-title);
+    font-size: inherit;
+    line-height: 1em;
+    font-variation-settings: "wdth" 600, "wght" 600;
+    font-style: oblique;
+}
+
+.noselect {
+    pointer-events: none;
+    -webkit-touch-callout: none; /* iOS Safari */
+      -webkit-user-select: none; /* Safari */
+           -o-user-select: none;
+       -khtml-user-select: none; /* Konqueror HTML */
+         -moz-user-select: none; /* Old versions of Firefox */
+          -ms-user-select: none; /* Internet Explorer/Edge */
+              user-select: none; /* Non-prefixed version, currently
+                                    supported by Chrome, Edge, Opera and Firefox */
+  }
+             

@@ -1,0 +1,33 @@
+---
+import {thumb} from '../lib/image'
+import {resolveLink} from '../lib/url'
+import type {CtaValue, SanityImage} from '../lib/types'
+
+interface Props {
+  images?: SanityImage[]
+  title?: string
+  button1?: CtaValue
+  button2?: CtaValue
+}
+const {images = [], title, button1, button2} = Astro.props
+const sized = images.map((img) => ({src: thumb(img, 800, 800, true), alt: img.alt ?? ''}))
+const doubled = [...sized, ...sized]
+const link1 = resolveLink(button1?.link)
+const link2 = resolveLink(button2?.link)
+---
+
+<section id="header" class="s-homeHeader">
+  <div class="s-homeHeader__images">
+    <div class="s-homeHeader__images__wrapper noselect">
+      {doubled.map((i) => <img src={i.src} alt={i.alt} />)}
+    </div>
+  </div>
+  <div class="s-homeHeader__text">
+    {title && <h2 set:html={title.replace(/\n/g, '<br />')} />}
+    {button1?.label && <a class="btn btn-primary" href={link1}>{button1.label}</a>}
+    {button2?.label && <a class="btn btn-link" href={link2}>{button2.label}</a>}
+  </div>
+  <img class="s-homeHeader__overlay noselect" src="/assets/images/blits-overlay.svg" alt="" />
+</section>
+
+<script src="/assets/js/homeHeader.js" is:inline></script>

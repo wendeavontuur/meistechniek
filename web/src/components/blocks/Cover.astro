@@ -1,0 +1,20 @@
+---
+import {thumb} from '../../lib/image'
+import type {SanityImage} from '../../lib/types'
+
+interface Props {
+  image: SanityImage
+  size?: string
+}
+const {image, size = 'medium'} = Astro.props
+
+const url = thumb(image, 1600, 900, false)
+const hotspot = image?.hotspot
+const focal = hotspot ? `${(hotspot.x * 100).toFixed(2)}% ${(hotspot.y * 100).toFixed(2)}%` : null
+---
+
+<div
+  class={`s-cover s-cover-${size}`}
+  style={`background-image: url('${url}')${focal ? `; background-position: ${focal}` : ''}`}
+>
+</div>

@@ -1,0 +1,44 @@
+@use 'base.scss' as *;
+
+@use 'cells/text.scss' as *;
+@use 'cells/buttons.scss' as *;
+@use 'cells/sections.scss' as *;
+@use 'cells/grid.scss' as *;
+@use 'cells/forms.scss' as *;
+
+@use 'species/globalMenu.scss' as *;
+@use 'species/globalFooter.scss' as *;
+@use 'species/homeHeader.scss' as *;
+@use 'species/storyBlockGallery.scss' as *;
+@use 'species/storyBlock.scss' as *;
+@use 'species/storyGallery.scss' as *;
+@use 'species/contactForm.scss' as *;
+@use 'species/squareCarousel.scss' as *;
+@use 'species/cover.scss' as *;
+
+.pageContent {
+    padding-top: 9rem;
+    padding: 9rem 1rem;
+    margin: 0 auto;
+    max-width:100rem;
+    .h1,
+    .block-type-heading,
+    .block-type-text,
+    .block-type-button {
+        max-width:48rem;
+        margin:0 auto;
+    }
+    .block-type-text {
+        font-size:1rem;
+    }
+}
+
+.page-home .pageContent {
+    padding-top:5rem;
+}
+
+@media screen and (min-width: 48rem){
+    .pageContent {
+        padding: 9rem 2rem;
+    }
+}

@@ -1,0 +1,29 @@
+---
+import StoryText from './_StoryText.astro'
+import {thumb} from '../../lib/image'
+import type {PortableTextBlock} from '@portabletext/types'
+import type {CtaValue, SanityImage} from '../../lib/types'
+
+interface Props {
+  subtitle?: string
+  title?: string
+  text?: PortableTextBlock[]
+  cta?: CtaValue[]
+  radio?: string
+  hashurl?: string
+  image?: SanityImage
+}
+const {subtitle, title, text, cta, radio = 'img-left', hashurl, image} = Astro.props
+const anchor = hashurl ? hashurl.toLowerCase().replace(/\s+/g, '-') : undefined
+const src = image ? thumb(image, 1200, 900, true) : null
+const alt = image?.alt ?? ''
+---
+
+<div class={`s-storyBlock section-l sectionBlock ${radio}`} id={anchor}>
+  <div class="s-storyBlock__text">
+    <StoryText subtitle={subtitle} title={title} text={text} cta={cta} />
+  </div>
+  <div class="s-storyBlock__image">
+    {src && <img src={src} alt={alt} loading="lazy" decoding="async" />}
+  </div>
+</div>

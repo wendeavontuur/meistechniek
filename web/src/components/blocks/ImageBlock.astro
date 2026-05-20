@@ -1,0 +1,36 @@
+---
+import {thumb, urlFor} from '../../lib/image'
+import {resolveLink} from '../../lib/url'
+import type {SanityImage, LinkValue} from '../../lib/types'
+
+interface Props {
+  image: SanityImage
+  alt?: string
+  caption?: string
+  ratio?: string
+  crop?: boolean
+  lightbox?: boolean
+  link?: LinkValue
+}
+const {image, alt, caption, ratio = 'auto', crop = true, lightbox = true, link} = Astro.props
+
+const fullUrl = urlFor(image).width(1800).url()
+const displayUrl = crop ? thumb(image, 1200, undefined, false) : urlFor(image).width(1200).url()
+const altText = alt ?? image.alt ?? ''
+const href = link ? resolveLink(link) : fullUrl
+const isLightbox = lightbox && !link
+---
+
+<figure>
+  <a
+    href={href}
+    class={isLightbox ? 'js-lightbox-item' : ''}
+    data-full={isLightbox ? fullUrl : undefined}
+    data-alt={altText}
+    target={link?.type === 'external' ? '_blank' : undefined}
+    rel={link?.type === 'external' ? 'noopener' : undefined}
+  >
+    <img src={displayUrl} alt={altText} style={`aspect-ratio: ${ratio};`} loading="lazy" decoding="async" />
+  </a>
+  {caption && <figcaption class="img-caption">{caption}</figcaption>}
+</figure>

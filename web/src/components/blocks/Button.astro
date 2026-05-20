@@ -1,0 +1,21 @@
+---
+import {resolveLink} from '../../lib/url'
+import type {LinkValue} from '../../lib/types'
+
+interface Props {
+  text: string
+  link?: LinkValue
+}
+const {text, link} = Astro.props
+const href = resolveLink(link)
+const external = link?.type === 'external'
+---
+
+<a
+  class="btn btn-primary"
+  href={href}
+  target={external ? '_blank' : undefined}
+  rel={external ? 'noopener' : undefined}
+>
+  {text}
+</a>

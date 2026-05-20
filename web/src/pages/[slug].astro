@@ -1,0 +1,33 @@
+---
+import Base from '../layouts/Base.astro'
+import BlockRenderer from '../components/blocks/BlockRenderer.astro'
+import {sanity} from '../lib/sanity'
+import {allPageSlugsQuery, pageBySlugQuery} from '../lib/queries'
+import type {Block, SeoValue} from '../lib/types'
+
+export async function getStaticPaths() {
+  const slugs = await sanity.fetch<Array<{slug: string; title: string}>>(allPageSlugsQuery)
+  return slugs
+    .filter((s) => s.slug !== 'contact') // contact.astro handles this
+    .map((s) => ({params: {slug: s.slug}}))
+}
+
+type Page = {
+  title: string
+  slug: string
+  blocks?: Block[]
+  seo?: SeoValue
+}
+
+const {slug} = Astro.params
+const page = await sanity.fetch<Page | null>(pageBySlugQuery, {slug})
+if (!page) {
+  return Astro.redirect('/404')
+}
+---
+
+<Base pageTitle={page.title} seo={page.seo} bodyClass={`page-${page.slug}`}>
+  <div class="pageContent">
+    <BlockRenderer blocks={page.blocks} />
+  </div>
+</Base>

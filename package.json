@@ -1,0 +1,17 @@
+{
+  "name": "meistechniek",
+  "private": true,
+  "version": "0.1.0",
+  "workspaces": [
+    "studio",
+    "web"
+  ],
+  "scripts": {
+    "studio:dev": "npm run dev --workspace=studio",
+    "web:dev": "npm run dev --workspace=web",
+    "web:build": "npm run build --workspace=web"
+  },
+  "engines": {
+    "node": ">=22.12"
+  }
+}

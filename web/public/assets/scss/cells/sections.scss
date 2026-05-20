@@ -1,0 +1,16 @@
+.section-l {
+    margin-top: 4rem;
+    margin-bottom: 4rem;
+}
+
+
+@media all and (min-width: 48rem) {
+    .section-m {
+        margin-top:4rem;
+        margin-bottom:4rem;
+    }
+    .section-l {
+        margin-top: 7rem;
+        margin-bottom: 7rem;
+    }
+}

@@ -1,0 +1,96 @@
+---
+import {urlFor} from '../lib/image'
+import {sanity} from '../lib/sanity'
+import {projectImagesQuery} from '../lib/queries'
+import type {SanityImage} from '../lib/types'
+
+type Item = {_id: string; image: SanityImage; alt?: string; tags?: string[]}
+
+const images = await sanity.fetch<Item[]>(projectImagesQuery)
+---
+
+<section class="s-squareCarousel section-l sectionBlock">
+  <div class="s-squareCarousel__header">
+    <div>
+      <p class="c-sectionLabel">Impressie</p>
+      <h3 class="c-sectionTitle">Intussen schakelt MEIS gewoon door</h3>
+    </div>
+    <a href="/aanbod" class="btn btn-primary">Bekijk het aanbod</a>
+  </div>
+
+  <div class="s-squareCarousel__images">
+    <div class="s-squareCarousel__images__wrapper">
+      {
+        images.map((item) => {
+          const thumbUrl = urlFor(item.image).width(700).height(700).fit('crop').crop('focalpoint').quality(85).url()
+          const fullUrl = urlFor(item.image).width(1800).height(1800).fit('max').url()
+          const alt = item.alt ?? ''
+          const labels = item.tags ?? []
+          return (
+            <div class="slide">
+              <img
+                src={thumbUrl}
+                width="700"
+                height="700"
+                alt={alt}
+                loading="lazy"
+                decoding="async"
+                sizes="(max-width: 400px) 80vw, 400px"
+                class="js-lightbox-item"
+                data-full={fullUrl}
+                data-alt={alt}
+                data-labels={labels.join('|')}
+              />
+              {labels.length > 0 && (
+                <div class="slide-labels">
+                  {labels.map((label) => (
+                    <span class="c-imageLabel">{label}</span>
+                  ))}
+                </div>
+              )}
+            </div>
+          )
+        })
+      }
+      {images.length === 0 && <p class="u-muted" style="margin: 1rem 0;">Nog geen beelden in de gallery</p>}
+    </div>
+
+    <div class="s-squareCarousel__navWrapper">
+      <span class="s-squareCarousel__nav left"><img src="/assets/images/arrow-l.png" alt="" /></span>
+      <span class="s-squareCarousel__nav right"><img src="/assets/images/arrow-r.png" alt="" /></span>
+    </div>
+  </div>
+</section>
+
+<dialog class="lb" id="lightbox" aria-label="Beelden bekijken">
+  <button class="lb__close" type="button" aria-label="Sluiten">&times;</button>
+  <button class="lb__nav lb__nav--prev" type="button" aria-label="Vorige">&#10094;</button>
+  <figure class="lb__stage">
+    <img class="lb__img" alt="" />
+    <figcaption class="lb__caption">
+      <div class="lb__labels"></div>
+      <div class="lb__counter"></div>
+    </figcaption>
+  </figure>
+  <button class="lb__nav lb__nav--next" type="button" aria-label="Volgende">&#10095;</button>
+</dialog>
+
+<style>
+  .lb {margin:0;padding:0;border:none;width:100vw;height:100vh;max-width:none;max-height:none;background:rgba(0,0,0,.9);display:none;}
+  .lb[open] {display:grid;place-items:center;}
+  .lb::backdrop {background:rgba(0,0,0,.6);}
+  .lb__stage {margin:0;max-width:92vw;max-height:88vh;display:grid;gap:.75rem;}
+  .lb__img {max-width:92vw;max-height:80vh;object-fit:contain;}
+  .lb__caption {display:flex;justify-content:space-between;align-items:center;color:#fff;font-size:.9rem;gap:1rem;}
+  .lb__labels {display:flex;flex-wrap:wrap;gap:.5rem;}
+  .lb__labels .tag {background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.2);padding:.25rem .5rem;border-radius:.5rem;}
+  .lb__counter {opacity:.8;white-space:nowrap;}
+  .lb__nav, .lb__close {position:fixed;top:50%;transform:translateY(-50%);background:rgba(0,0,0,.4);color:#fff;border:0;padding:.5rem .75rem;font-size:2rem;cursor:pointer;}
+  .lb__nav--prev {left:1rem;}
+  .lb__nav--next {right:1rem;}
+  .lb__close {top:1rem;right:1rem;transform:none;font-size:2rem;}
+  @media (max-width: 640px) {.lb__nav {font-size:1.5rem;padding:.4rem .6rem;} .lb__caption {flex-direction:column;align-items:flex-start;}}
+</style>
+
+<script src="/assets/js/squareCarousel.js" is:inline></script>
+<script src="/assets/js/lightbox.js" is:inline></script>

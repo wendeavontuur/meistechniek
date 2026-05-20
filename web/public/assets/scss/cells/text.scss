@@ -1,0 +1,56 @@
+.c-section {
+    &Label {
+        font-size: 0.75rem;
+        text-transform: uppercase;
+        font-style: oblique;
+        color: var(--color-blue);
+        letter-spacing: 0.15em;
+        font-family: var(--font-family-title);
+        font-variation-settings: "wdth" 600, "wght" 500;
+        margin-bottom: 0.5rem;
+    }
+    &Title {
+        font-family: var(--font-family-title);
+        font-size:1.5rem;
+        margin-bottom: 0.75em;
+    }
+    &Text {
+        font-family: var(--font-family-base);
+        font-size:1rem;
+        line-height: 1.5em;
+        margin-bottom: 1em;
+    }
+}
+
+.c-pageTitle {
+    @extend .c-sectionTitle;
+    font-size:1.75rem;
+}
+
+.c-imageLabel {
+    font-family: var(--font-family-title);
+    font-variation-settings: "wdth" 600, "wght" 500;
+    background-color: var(--color-blue);
+    padding: 0.2rem 0.6rem;
+    border-radius: 3px;
+    font-size: 0.5rem;
+    margin-right: 0.4rem;
+    margin-bottom: 0.4rem;
+    display: inline-block;
+    text-transform: uppercase;
+    font-style:oblique;
+}
+
+@media all and (min-width: 48rem) {
+    .c-section {
+        &Title {
+            font-size:2.25rem;
+        }
+        &Text {
+            font-size:1.25rem;
+        }
+    }
+    .c-pagetitle {
+        font-size:2.5rem;
+    }
+}

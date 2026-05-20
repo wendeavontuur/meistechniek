@@ -1,0 +1,44 @@
+---
+import Seo from '../components/Seo.astro'
+import GlobalMenu from '../components/GlobalMenu.astro'
+import GlobalFooter from '../components/GlobalFooter.astro'
+import {sanity} from '../lib/sanity'
+import {siteSettingsQuery} from '../lib/queries'
+import type {SeoValue, SiteSettings} from '../lib/types'
+
+interface Props {
+  pageTitle: string
+  seo?: SeoValue
+  bodyClass?: string
+  isHome?: boolean
+}
+
+const {pageTitle, seo, bodyClass = '', isHome = false} = Astro.props
+
+const settings = await sanity.fetch<SiteSettings | null>(siteSettingsQuery)
+const pageUrl = new URL(Astro.url.pathname, Astro.site ?? 'https://meistechniek.nl').toString()
+---
+
+<!doctype html>
+<html lang="nl">
+  <head>
+    <Seo
+      pageTitle={pageTitle}
+      pageUrl={pageUrl}
+      seo={seo}
+      settings={settings}
+      isHome={isHome}
+    />
+  </head>
+  <body class={bodyClass}>
+    <GlobalMenu settings={settings} currentPath={Astro.url.pathname} />
+
+    <main class="main">
+      <slot />
+    </main>
+
+    <GlobalFooter settings={settings} />
+
+    <script src="/assets/js/script.js" is:inline></script>
+  </body>
+</html>

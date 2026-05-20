@@ -1,0 +1,73 @@
+---
+import type {SeoValue, SiteSettings, SanityImage} from '../lib/types'
+import {urlFor} from '../lib/image'
+
+interface Props {
+  pageTitle: string
+  pageUrl: string
+  seo?: SeoValue
+  settings?: SiteSettings | null
+  isHome?: boolean
+}
+
+const {pageTitle, pageUrl, seo, settings, isHome = false} = Astro.props
+
+const siteTitle = settings?.siteTitle ?? 'Meistechniek'
+const finalTitle = seo?.title ?? (isHome ? siteTitle : `${pageTitle} | ${siteTitle}`)
+const desc = seo?.description ?? settings?.defaultMetaDescription ?? ''
+const canonical = seo?.canonical ?? pageUrl
+const robots = seo?.noindex ? 'noindex, nofollow' : 'index, follow'
+const ogTitle = seo?.ogTitle ?? finalTitle
+const ogDesc = seo?.ogDescription ?? desc
+
+const ogImageRaw: SanityImage | undefined = seo?.ogImage ?? settings?.defaultOgImage
+const ogImageUrl = ogImageRaw?.asset ? urlFor(ogImageRaw).width(1200).height(630).url() : undefined
+const twitterCard = ogImageUrl ? 'summary_large_image' : 'summary'
+
+const orgLd = {
+  '@context': 'https://schema.org',
+  '@type': 'Organization',
+  name: settings?.organizationName ?? siteTitle,
+  url: Astro.site?.toString() ?? canonical,
+  logo: ogImageUrl,
+}
+
+const pageLd = {
+  '@context': 'https://schema.org',
+  '@type': 'WebPage',
+  name: pageTitle,
+  url: pageUrl,
+  description: desc,
+}
+---
+
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+
+<title>{finalTitle}</title>
+{desc && <meta name="description" content={desc} />}
+
+<link rel="canonical" href={canonical} />
+<meta name="robots" content={robots} />
+
+<meta property="og:type" content="website" />
+<meta property="og:title" content={ogTitle} />
+<meta property="og:description" content={ogDesc} />
+<meta property="og:url" content={pageUrl} />
+{ogImageUrl && <meta property="og:image" content={ogImageUrl} />}
+
+<meta name="twitter:card" content={twitterCard} />
+<meta name="twitter:title" content={ogTitle} />
+<meta name="twitter:description" content={ogDesc} />
+{ogImageUrl && <meta name="twitter:image" content={ogImageUrl} />}
+
+<link rel="icon" href="/favicon.ico" />
+
+<link rel="preconnect" href="https://use.typekit.net" crossorigin />
+<link rel="stylesheet" href="https://use.typekit.net/rnp2lqh.css" />
+
+<link rel="stylesheet" href="/assets/css/index.css" />
+<link rel="stylesheet" href="/assets/css/style.css" />
+
+<script type="application/ld+json" set:html={JSON.stringify(orgLd)} />
+<script type="application/ld+json" set:html={JSON.stringify(pageLd)} />

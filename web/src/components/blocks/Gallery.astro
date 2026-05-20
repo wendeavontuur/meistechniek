@@ -1,0 +1,34 @@
+---
+import {thumb, urlFor} from '../../lib/image'
+import type {SanityImage} from '../../lib/types'
+
+interface Props {
+  images: SanityImage[]
+  ratio?: string
+  crop?: boolean
+  caption?: string
+}
+const {images, ratio = 'auto', crop = true, caption} = Astro.props
+---
+
+<figure class="gallery">
+  <ul>
+    {
+      images.map((image) => {
+        const src = crop ? thumb(image, 1200, undefined, false) : urlFor(image).width(1200).url()
+        const full = urlFor(image).width(1800).url()
+        const altText = image.alt ?? ''
+        return (
+          <li>
+            <figure>
+              <a href={full} class="js-lightbox-item" data-full={full} data-alt={altText}>
+                <img src={src} alt={altText} style={`aspect-ratio: ${ratio};`} loading="lazy" decoding="async" />
+              </a>
+            </figure>
+          </li>
+        )
+      })
+    }
+  </ul>
+  {caption && <figcaption>{caption}</figcaption>}
+</figure>

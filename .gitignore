@@ -1,0 +1,17 @@
+node_modules/
+.env
+.env.*
+!.env.example
+
+# Astro
+web/dist/
+web/.astro/
+
+# Sanity
+studio/dist/
+studio/.sanity/
+
+# OS / editor
+.DS_Store
+.idea/
+.vscode/

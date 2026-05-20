@@ -1,0 +1,36 @@
+---
+import PortableText from '../PortableText.astro'
+import {resolveLink} from '../../lib/url'
+import type {PortableTextBlock} from '@portabletext/types'
+import type {CtaValue} from '../../lib/types'
+
+interface Props {
+  subtitle?: string
+  title?: string
+  text?: PortableTextBlock[]
+  cta?: CtaValue[]
+}
+const {subtitle, title, text, cta = []} = Astro.props
+---
+
+<p class="s-storyBlock__text__label c-sectionLabel">{subtitle ?? ''}</p>
+<h3 class="s-storyBlock__text__title c-sectionTitle">{title ?? ''}</h3>
+<div class="s-storyBlock__text__body c-sectionText">
+  <PortableText value={text} />
+</div>
+{
+  cta.map((item, i) => {
+    const href = resolveLink(item.link)
+    const isExternal = item.link?.type === 'external'
+    return (
+      <a
+        class={`btn${i === 0 ? ' btn-primary' : ' btn-link'}`}
+        href={href}
+        target={isExternal ? '_blank' : undefined}
+        rel={isExternal ? 'noopener' : undefined}
+      >
+        {item.label}
+      </a>
+    )
+  })
+}

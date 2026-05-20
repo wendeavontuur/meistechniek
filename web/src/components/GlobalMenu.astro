@@ -1,0 +1,46 @@
+---
+import type {SiteSettings} from '../lib/types'
+import {resolveLink} from '../lib/url'
+
+interface Props {
+  settings?: SiteSettings | null
+  currentPath: string
+}
+const {settings, currentPath} = Astro.props
+
+const items = settings?.menu ?? []
+const isActive = (href: string) => {
+  if (href === '/') return currentPath === '/'
+  return currentPath === href || currentPath.startsWith(href + '/')
+}
+---
+
+<header class="header s-globalMenu top">
+  <div class="s-globalMenu__wrapper">
+    <a class="s-globalMenu__logo" href="/">
+      <img src="/assets/images/Meis-logo.svg" alt="Meistechniek" />
+    </a>
+
+    <button class="s-globalMenu__toggle" aria-label="Menu Toggle">
+      <span></span><span></span><span></span>
+    </button>
+
+    <nav class="menu s-globalMenu__pageList">
+      {
+        items.map((item) => {
+          const href = resolveLink(item.link)
+          return (
+            <a
+              class={`btn btn-link ${isActive(href) ? 'current' : ''}`}
+              href={href}
+            >
+              {item.label}
+            </a>
+          )
+        })
+      }
+      <a class="btn btn-link" href="/contact">Contact</a>
+      <a class="btn btn-primary" href="/contact">Offerte aanvragen</a>
+    </nav>
+  </div>
+</header>

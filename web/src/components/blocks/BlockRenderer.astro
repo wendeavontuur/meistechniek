@@ -1,0 +1,133 @@
+---
+import type {Block} from '../../lib/types'
+
+import Cover from './Cover.astro'
+import Heading from './Heading.astro'
+import TextBlock from './TextBlock.astro'
+import ImageBlock from './ImageBlock.astro'
+import Gallery from './Gallery.astro'
+import Video from './Video.astro'
+import Button from './Button.astro'
+import ContactForm from './ContactForm.astro'
+import OneImageStory from './OneImageStory.astro'
+import TwoImageStory from './TwoImageStory.astro'
+import ThreeImageStory from './ThreeImageStory.astro'
+import MultiImageStory from './MultiImageStory.astro'
+
+interface Props {
+  blocks?: Block[]
+}
+const {blocks = []} = Astro.props
+---
+
+{
+  blocks.map((block) => {
+    const wrapClass = `block block-type-${block._type}`
+    switch (block._type) {
+      case 'cover':
+        return <div id={block._key} class={wrapClass}><Cover image={block.image} size={block.size} /></div>
+      case 'heading':
+        return <div id={block._key} class={wrapClass}><Heading text={block.text} /></div>
+      case 'textBlock':
+        return <div id={block._key} class={wrapClass}><TextBlock text={block.text} /></div>
+      case 'imageBlock':
+        return (
+          <div id={block._key} class={wrapClass}>
+            <ImageBlock
+              image={block.image}
+              alt={block.alt}
+              caption={block.caption}
+              ratio={block.ratio}
+              crop={block.crop}
+              lightbox={block.lightbox}
+              link={block.link}
+            />
+          </div>
+        )
+      case 'gallery':
+        return (
+          <div id={block._key} class={wrapClass}>
+            <Gallery
+              images={block.images}
+              ratio={block.ratio}
+              crop={block.crop}
+              caption={block.caption}
+            />
+          </div>
+        )
+      case 'video':
+        return <div id={block._key} class={wrapClass}><Video url={block.url} caption={block.caption} /></div>
+      case 'buttonBlock':
+        return <div id={block._key} class={wrapClass}><Button text={block.text} link={block.link} /></div>
+      case 'contactFormBlock':
+        return (
+          <div id={block._key} class={wrapClass}>
+            <ContactForm
+              subtitle={block.subtitle}
+              title={block.title}
+              text={block.text}
+              hashurl={block.hashurl}
+            />
+          </div>
+        )
+      case 'oneImageStory':
+        return (
+          <div id={block._key} class={wrapClass}>
+            <OneImageStory
+              subtitle={block.subtitle}
+              title={block.title}
+              text={block.text}
+              cta={block.cta}
+              radio={block.radio}
+              hashurl={block.hashurl}
+              image={block.image}
+            />
+          </div>
+        )
+      case 'twoImageStory':
+        return (
+          <div id={block._key} class={wrapClass}>
+            <TwoImageStory
+              subtitle={block.subtitle}
+              title={block.title}
+              text={block.text}
+              cta={block.cta}
+              radio={block.radio}
+              hashurl={block.hashurl}
+              images={block.images}
+            />
+          </div>
+        )
+      case 'threeImageStory':
+        return (
+          <div id={block._key} class={wrapClass}>
+            <ThreeImageStory
+              subtitle={block.subtitle}
+              title={block.title}
+              text={block.text}
+              cta={block.cta}
+              radio={block.radio}
+              hashurl={block.hashurl}
+              images={block.images}
+            />
+          </div>
+        )
+      case 'multiImageStory':
+        return (
+          <div id={block._key} class={wrapClass}>
+            <MultiImageStory
+              subtitle={block.subtitle}
+              title={block.title}
+              text={block.text}
+              cta={block.cta}
+              radio={block.radio}
+              hashurl={block.hashurl}
+              images={block.images}
+            />
+          </div>
+        )
+      default:
+        return null
+    }
+  })
+}

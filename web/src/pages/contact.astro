@@ -1,0 +1,20 @@
+---
+import Base from '../layouts/Base.astro'
+import BlockRenderer from '../components/blocks/BlockRenderer.astro'
+import {sanity} from '../lib/sanity'
+import {contactQuery} from '../lib/queries'
+import type {Block, SeoValue} from '../lib/types'
+
+type Contact = {title: string; blocks?: Block[]; seo?: SeoValue}
+
+const page = await sanity.fetch<Contact | null>(contactQuery)
+if (!page) {
+  return Astro.redirect('/404')
+}
+---
+
+<Base pageTitle={page.title} seo={page.seo} bodyClass="page-contact">
+  <div class="pageContent">
+    <BlockRenderer blocks={page.blocks} />
+  </div>
+</Base>

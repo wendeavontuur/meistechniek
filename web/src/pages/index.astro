@@ -1,0 +1,40 @@
+---
+import Base from '../layouts/Base.astro'
+import HomeHeader from '../components/HomeHeader.astro'
+import SquareCarousel from '../components/SquareCarousel.astro'
+import BlockRenderer from '../components/blocks/BlockRenderer.astro'
+import {sanity} from '../lib/sanity'
+import {homeQuery} from '../lib/queries'
+import type {Block, CtaValue, SanityImage, SeoValue} from '../lib/types'
+
+type Home = {
+  title: string
+  banner?: {
+    images?: SanityImage[]
+    title?: string
+    button1?: CtaValue
+    button2?: CtaValue
+  }
+  blocks?: Block[]
+  seo?: SeoValue
+}
+
+const home = await sanity.fetch<Home | null>(homeQuery)
+if (!home) {
+  return Astro.redirect('/404')
+}
+---
+
+<Base pageTitle={home.title} seo={home.seo} isHome bodyClass="page-home">
+  <HomeHeader
+    images={home.banner?.images}
+    title={home.banner?.title}
+    button1={home.banner?.button1}
+    button2={home.banner?.button2}
+  />
+
+  <div class="pageContent">
+    <BlockRenderer blocks={home.blocks} />
+    <SquareCarousel />
+  </div>
+</Base>

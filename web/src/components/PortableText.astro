@@ -1,0 +1,23 @@
+---
+import {PortableText} from 'astro-portabletext'
+import type {PortableTextBlock} from '@portabletext/types'
+import {resolveLink} from '../lib/url'
+import type {LinkValue} from '../lib/types'
+
+interface Props {
+  value?: PortableTextBlock[]
+}
+const {value} = Astro.props
+
+const components = {
+  mark: {
+    link: ({value, children}: {value?: LinkValue; children: any}) => {
+      const href = resolveLink(value)
+      const external = value?.type === 'external'
+      return `<a href="${href}"${external ? ' target="_blank" rel="noopener"' : ''}>${children}</a>`
+    },
+  },
+}
+---
+
+{value && value.length > 0 && <PortableText value={value} components={components} />}

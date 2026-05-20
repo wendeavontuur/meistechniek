@@ -1,0 +1,13 @@
+---
+import PortableText from '../PortableText.astro'
+import type {PortableTextBlock} from '@portabletext/types'
+
+interface Props {
+  text?: PortableTextBlock[]
+}
+const {text} = Astro.props
+---
+
+<div class="c-sectionText">
+  <PortableText value={text} />
+</div>

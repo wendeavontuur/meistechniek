@@ -1,0 +1,124 @@
+.footer {
+    background-color: var(--color-black); // brown background
+    color: var(--color-white); // light beige
+    padding: 2rem 1.5rem;
+  
+    .footer__container {
+      max-width: 100rem;
+      margin: 0 auto;
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+    }
+  
+    .footer__logo {
+      opacity:0.25;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      img {
+        max-width: 24rem;
+        width:50%;
+      }
+      .footer__brand {
+        font-size: 4rem;
+        font-weight: bold;
+        margin: 0;
+        letter-spacing: -0.05em;
+      }
+  
+      .footer__tagline {
+        font-size: 1rem;
+        letter-spacing: 0.1em;
+        font-style: italic;
+        margin-top: 0.5rem;
+      }
+    }
+  
+    .footer__icon {
+      display: block;
+      opacity: 0.25;
+    }
+  
+    .footer__column {
+      h4 {
+        font-size: 1rem;
+        font-weight: bold;
+        letter-spacing: 0.1em;
+        margin-bottom: 0.5rem;
+      }
+  
+      ul {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+  
+        li {
+          margin-bottom: 0.4rem;
+  
+          a {
+            text-decoration: none;
+            color: #e8e1d6;
+            font-size: 0.95rem;
+  
+            &:hover {
+              text-decoration: underline;
+            }
+          }
+        }
+      }
+    }
+  
+    // Responsive tweaks
+    @media (min-width: 35rem) {
+      .footer_pages {
+        display:flex;
+        align-items: top;
+        .col {
+          flex: 1 1 50%;
+        }
+      }
+    }
+    @media (min-width: 48rem){
+      .footer_pages,
+      .footer__logo {
+        align-items: start;
+        width:25rem;
+      }
+      .footer__logo {
+        justify-content:start;
+      }
+    }
+    @media (min-width:60rem) {
+      .footer__logo {
+        img {
+          width:100%;
+        }
+      }
+    }
+    @media (max-width: 70rem) {
+      .footer__icon {
+        display: none;
+      }
+    }
+    @media (max-width: 768px) {
+      .footer__container {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+      .footer__logo {
+        order:2;
+        width:100%;
+      }
+      .footer_pages {
+        width:100%;
+      }
+      .footer_pages .col {
+        margin-bottom:2rem;
+        width: 100%;
+      }
+
+      
+    }
+  }
+  
