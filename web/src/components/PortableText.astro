@@ -1,5 +1,4 @@
 ---
-import {PortableText} from 'astro-portabletext'
 import type {PortableTextBlock} from '@portabletext/types'
 import {resolveLink} from '../lib/url'
 import type {LinkValue} from '../lib/types'
@@ -9,15 +8,50 @@ interface Props {
 }
 const {value} = Astro.props
 
-const components = {
-  mark: {
-    link: ({value, children}: {value?: LinkValue; children: any}) => {
-      const href = resolveLink(value)
-      const external = value?.type === 'external'
-      return `<a href="${href}"${external ? ' target="_blank" rel="noopener"' : ''}>${children}</a>`
-    },
-  },
+function renderSpan(child: any, markDefs: any[]): string {
+  if (child._type !== 'span') return ''
+  let text = escapeHtml(child.text ?? '')
+  const marks: string[] = child.marks ?? []
+  // Sort so link wraps decorators (outermost first)
+  const linkMarks = marks
+    .map((m) => markDefs.find((d) => d._key === m))
+    .filter((d): d is LinkValue & {_key: string; _type: string} => !!d && d._type === 'link')
+  const decoMarks = marks.filter((m) => m === 'strong' || m === 'em')
+
+  for (const deco of decoMarks) {
+    text = `<${deco}>${text}</${deco}>`
+  }
+  for (const link of linkMarks) {
+    const href = resolveLink(link as LinkValue)
+    const external = link.type === 'external'
+    const attrs = external ? ' target="_blank" rel="noopener"' : ''
+    text = `<a href="${escapeAttr(href)}"${attrs}>${text}</a>`
+  }
+  return text
 }
+
+function escapeHtml(s: string): string {
+  return s
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+}
+function escapeAttr(s: string): string {
+  return s.replace(/&/g, '&amp;').replace(/"/g, '&quot;')
+}
+
+function renderBlock(block: any): string {
+  if (block._type !== 'block') return ''
+  const markDefs: any[] = block.markDefs ?? []
+  const inner = (block.children ?? []).map((c: any) => renderSpan(c, markDefs)).join('')
+  const style = block.style ?? 'normal'
+  if (style === 'normal') return `<p>${inner}</p>`
+  if (style === 'h2' || style === 'h3' || style === 'h4') return `<${style}>${inner}</${style}>`
+  return `<p>${inner}</p>`
+}
+
+const html = (value ?? []).map(renderBlock).join('')
 ---
 
-{value && value.length > 0 && <PortableText value={value} components={components} />}
+<Fragment set:html={html} />

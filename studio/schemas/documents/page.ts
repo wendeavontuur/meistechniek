@@ -1,5 +1,5 @@
 import {defineType, defineField} from 'sanity'
-import {blockRefs} from '../index'
+import {blockRefs} from '../blockRefs'
 
 export const page = defineType({
   name: 'page',
