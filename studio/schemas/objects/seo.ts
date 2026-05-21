@@ -4,7 +4,6 @@ export const seo = defineType({
   name: 'seo',
   title: 'SEO',
   type: 'object',
-  options: {collapsible: true, collapsed: true},
   fields: [
     defineField({
       name: 'title',
