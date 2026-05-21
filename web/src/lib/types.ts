@@ -77,10 +77,18 @@ export type Block =
 export type SiteSettings = {
   siteTitle: string
   organizationName?: string
+  primaryCta?: CtaValue
   menu?: Array<{label: string; link?: LinkValue}>
-  footerText?: PortableTextBlock[]
+  footerColumns?: Array<{
+    heading: string
+    links?: Array<{label: string; link?: LinkValue}>
+  }>
   socials?: Array<{platform: string; url: string}>
   defaultMetaDescription?: string
   defaultOgImage?: SanityImage
   projectTags?: string[]
+  carouselSubtitle?: string
+  carouselTitle?: string
+  carouselCta?: CtaValue
+  formspreeEndpoint?: string
 }

@@ -1,5 +1,6 @@
 ---
 import type {SiteSettings} from '../lib/types'
+import {resolveLink} from '../lib/url'
 
 interface Props {
   settings?: SiteSettings | null
@@ -9,6 +10,7 @@ const {settings} = Astro.props
 const rawTags = settings?.projectTags ?? []
 const tags = [...rawTags].sort((a, b) => a.localeCompare(b))
 const tagSlug = (tag: string) => tag.toLowerCase().replace(/\s+/g, '')
+const extraColumns = settings?.footerColumns ?? []
 ---
 
 <footer class="footer">
@@ -25,7 +27,7 @@ const tagSlug = (tag: string) => tag.toLowerCase().replace(/\s+/g, '')
       {
         tags.length > 0 && (
           <div class="col">
-            <h4><a href="/aanbod"></a>AANBOD</h4>
+            <h4><a href="/aanbod">AANBOD</a></h4>
             <ul>
               {tags.map((tag) => (
                 <li>
@@ -37,14 +39,20 @@ const tagSlug = (tag: string) => tag.toLowerCase().replace(/\s+/g, '')
         )
       }
 
-      <div class="col">
-        <h4>LET’S CONNECT</h4>
-        <ul>
-          <li><a href="/over">Over Meis</a></li>
-          <li><a href="/contact">Contact</a></li>
-          <li><a href="/contact">Offerte aanvragen</a></li>
-        </ul>
-      </div>
+      {
+        extraColumns.map((col) => (
+          <div class="col">
+            <h4>{col.heading}</h4>
+            <ul>
+              {(col.links ?? []).map((l) => (
+                <li>
+                  <a href={resolveLink(l.link)}>{l.label}</a>
+                </li>
+              ))}
+            </ul>
+          </div>
+        ))
+      }
     </div>
   </div>
 </footer>

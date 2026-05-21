@@ -90,11 +90,18 @@ export const contactQuery = `
 export const siteSettingsQuery = `
   *[_type == "siteSettings"][0]{
     siteTitle, organizationName,
+    primaryCta{${ctaProjection}},
     menu[]{label, link{${linkProjection}}},
-    footerText,
+    footerColumns[]{
+      heading,
+      links[]{label, link{${linkProjection}}}
+    },
     socials[]{platform, url},
     defaultMetaDescription, defaultOgImage,
-    projectTags
+    projectTags,
+    carouselSubtitle, carouselTitle,
+    carouselCta{${ctaProjection}},
+    formspreeEndpoint
   }
 `
 

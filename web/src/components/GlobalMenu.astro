@@ -9,6 +9,10 @@ interface Props {
 const {settings, currentPath} = Astro.props
 
 const items = settings?.menu ?? []
+const primaryCta = settings?.primaryCta
+const primaryHref = primaryCta ? resolveLink(primaryCta.link) : '/contact'
+const primaryLabel = primaryCta?.label ?? 'Offerte aanvragen'
+
 const isActive = (href: string) => {
   if (href === '/') return currentPath === '/'
   return currentPath === href || currentPath.startsWith(href + '/')
@@ -18,7 +22,7 @@ const isActive = (href: string) => {
 <header class="header s-globalMenu top">
   <div class="s-globalMenu__wrapper">
     <a class="s-globalMenu__logo" href="/">
-      <img src="/assets/images/Meis-logo.svg" alt="Meistechniek" />
+      <img src="/assets/images/Meis-logo.svg" alt={settings?.siteTitle ?? 'Meistechniek'} />
     </a>
 
     <button class="s-globalMenu__toggle" aria-label="Menu Toggle">
@@ -30,17 +34,13 @@ const isActive = (href: string) => {
         items.map((item) => {
           const href = resolveLink(item.link)
           return (
-            <a
-              class={`btn btn-link ${isActive(href) ? 'current' : ''}`}
-              href={href}
-            >
+            <a class={`btn btn-link ${isActive(href) ? 'current' : ''}`} href={href}>
               {item.label}
             </a>
           )
         })
       }
-      <a class="btn btn-link" href="/contact">Contact</a>
-      <a class="btn btn-primary" href="/contact">Offerte aanvragen</a>
+      <a class="btn btn-primary" href={primaryHref}>{primaryLabel}</a>
     </nav>
   </div>
 </header>

@@ -492,29 +492,40 @@ async function buildSiteSettings(
     .filter(Boolean)
   const ogUuids = extractUuids(txt['og-image'])
   const ogAsset = ogUuids[0] ? imgMap[ogUuids[0]] : undefined
+  const contactLink = {type: 'internal', internal: {_type: 'reference', _ref: 'contactPage', _weak: true}}
+  const aanbodLink = {type: 'internal', internal: {_type: 'reference', _ref: 'pageAanbod', _weak: true}}
+  const overLink = {type: 'internal', internal: {_type: 'reference', _ref: 'pageOver', _weak: true}}
+
   return {
     _id: 'siteSettings',
     _type: 'siteSettings',
     siteTitle: 'Meistechniek',
     organizationName: txt['organization-name'] ?? 'MEIS Techniek',
+    primaryCta: {_type: 'cta', label: 'Offerte aanvragen', link: contactLink},
     menu: [
       {_key: randKey(), _type: 'menuItem', label: 'Home', link: {type: 'external', href: '/'}},
+      {_key: randKey(), _type: 'menuItem', label: 'Over MEIS', link: overLink},
+      {_key: randKey(), _type: 'menuItem', label: 'Aanbod', link: aanbodLink},
+    ],
+    footerColumns: [
       {
         _key: randKey(),
-        _type: 'menuItem',
-        label: 'Over MEIS',
-        link: {type: 'internal', internal: {_type: 'reference', _ref: 'pageOver', _weak: true}},
-      },
-      {
-        _key: randKey(),
-        _type: 'menuItem',
-        label: 'Aanbod',
-        link: {type: 'internal', internal: {_type: 'reference', _ref: 'pageAanbod', _weak: true}},
+        _type: 'footerColumn',
+        heading: 'LET’S CONNECT',
+        links: [
+          {_key: randKey(), _type: 'footerLink', label: 'Over Meis', link: overLink},
+          {_key: randKey(), _type: 'footerLink', label: 'Contact', link: contactLink},
+          {_key: randKey(), _type: 'footerLink', label: 'Offerte aanvragen', link: contactLink},
+        ],
       },
     ],
     defaultMetaDescription: txt['meta-description'] ?? undefined,
     defaultOgImage: ogAsset ? imageRef(ogAsset) : undefined,
     projectTags: tags,
+    carouselSubtitle: 'Impressie',
+    carouselTitle: 'Intussen schakelt MEIS gewoon door',
+    carouselCta: {_type: 'cta', label: 'Bekijk het aanbod', link: aanbodLink},
+    formspreeEndpoint: 'https://formspree.io/f/xkgzaazv',
   }
 }
 

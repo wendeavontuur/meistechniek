@@ -1,21 +1,30 @@
 ---
 import {urlFor} from '../lib/image'
 import {sanity} from '../lib/sanity'
-import {projectImagesQuery} from '../lib/queries'
-import type {SanityImage} from '../lib/types'
+import {projectImagesQuery, siteSettingsQuery} from '../lib/queries'
+import {resolveLink} from '../lib/url'
+import type {SanityImage, SiteSettings} from '../lib/types'
 
 type Item = {_id: string; image: SanityImage; alt?: string; tags?: string[]}
 
-const images = await sanity.fetch<Item[]>(projectImagesQuery)
+const [images, settings] = await Promise.all([
+  sanity.fetch<Item[]>(projectImagesQuery),
+  sanity.fetch<SiteSettings | null>(siteSettingsQuery),
+])
+
+const subtitle = settings?.carouselSubtitle ?? 'Impressie'
+const title = settings?.carouselTitle ?? 'Intussen schakelt MEIS gewoon door'
+const ctaLabel = settings?.carouselCta?.label ?? 'Bekijk het aanbod'
+const ctaHref = settings?.carouselCta?.link ? resolveLink(settings.carouselCta.link) : '/aanbod'
 ---
 
 <section class="s-squareCarousel section-l sectionBlock">
   <div class="s-squareCarousel__header">
     <div>
-      <p class="c-sectionLabel">Impressie</p>
-      <h3 class="c-sectionTitle">Intussen schakelt MEIS gewoon door</h3>
+      <p class="c-sectionLabel">{subtitle}</p>
+      <h3 class="c-sectionTitle">{title}</h3>
     </div>
-    <a href="/aanbod" class="btn btn-primary">Bekijk het aanbod</a>
+    <a href={ctaHref} class="btn btn-primary">{ctaLabel}</a>
   </div>
 
   <div class="s-squareCarousel__images">

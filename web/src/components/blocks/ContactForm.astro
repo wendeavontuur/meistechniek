@@ -1,4 +1,8 @@
 ---
+import {sanity} from '../../lib/sanity'
+import {siteSettingsQuery} from '../../lib/queries'
+import type {SiteSettings} from '../../lib/types'
+
 interface Props {
   subtitle?: string
   title?: string
@@ -7,6 +11,9 @@ interface Props {
 }
 const {subtitle, title, text, hashurl} = Astro.props
 const anchor = hashurl ? hashurl.toLowerCase().replace(/\s+/g, '-') : undefined
+
+const settings = await sanity.fetch<SiteSettings | null>(siteSettingsQuery)
+const formAction = settings?.formspreeEndpoint ?? 'https://formspree.io/f/xkgzaazv'
 ---
 
 <div class="s-contactForm section-m" id={anchor}>
@@ -16,7 +23,7 @@ const anchor = hashurl ? hashurl.toLowerCase().replace(/\s+/g, '-') : undefined
     {text && <p class="c-sectionText">{text}<br /></p>}
   </div>
   <div class="s-contactForm__form">
-    <form action="https://formspree.io/f/xkgzaazv" method="POST">
+    <form action={formAction} method="POST">
       <div class="form-row">
         <div class="form-group">
           <label for="name">Je naam *</label>

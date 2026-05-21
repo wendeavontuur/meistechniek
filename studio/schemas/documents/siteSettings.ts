@@ -8,7 +8,8 @@ export const siteSettings = defineType({
     {name: 'general', title: 'Algemeen', default: true},
     {name: 'nav', title: 'Navigatie & Footer'},
     {name: 'seo', title: 'Default SEO'},
-    {name: 'carousel', title: 'Carousel'},
+    {name: 'carousel', title: 'Project-carousel'},
+    {name: 'contact', title: 'Contactformulier'},
   ],
   fields: [
     defineField({
@@ -18,6 +19,13 @@ export const siteSettings = defineType({
       validation: (R) => R.required(),
     }),
     defineField({name: 'organizationName', type: 'string', group: 'general'}),
+    defineField({
+      name: 'primaryCta',
+      title: 'Primaire CTA (in menu + algemeen)',
+      type: 'cta',
+      group: 'general',
+      description: 'Standaard de "Offerte aanvragen" knop rechtsboven.',
+    }),
     defineField({
       name: 'menu',
       title: 'Hoofdmenu',
@@ -79,6 +87,47 @@ export const siteSettings = defineType({
       group: 'carousel',
       of: [{type: 'string'}],
       options: {layout: 'tags'},
+    }),
+    defineField({name: 'carouselSubtitle', title: 'Subtitel', type: 'string', group: 'carousel'}),
+    defineField({name: 'carouselTitle', title: 'Titel', type: 'string', group: 'carousel'}),
+    defineField({name: 'carouselCta', title: 'CTA-knop', type: 'cta', group: 'carousel'}),
+    defineField({
+      name: 'formspreeEndpoint',
+      title: 'Formspree endpoint-URL',
+      type: 'url',
+      group: 'contact',
+      description: 'Bijv. https://formspree.io/f/xkgzaazv',
+    }),
+    defineField({
+      name: 'footerColumns',
+      title: 'Extra footer-kolommen',
+      type: 'array',
+      group: 'nav',
+      of: [
+        {
+          type: 'object',
+          name: 'footerColumn',
+          fields: [
+            {name: 'heading', type: 'string', validation: (R) => R.required()},
+            {
+              name: 'links',
+              type: 'array',
+              of: [
+                {
+                  type: 'object',
+                  name: 'footerLink',
+                  fields: [
+                    {name: 'label', type: 'string', validation: (R) => R.required()},
+                    {name: 'link', type: 'link'},
+                  ],
+                  preview: {select: {title: 'label'}},
+                },
+              ],
+            },
+          ],
+          preview: {select: {title: 'heading'}},
+        },
+      ],
     }),
   ],
   preview: {
